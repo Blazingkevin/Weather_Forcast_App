@@ -3,4 +3,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- dummy string -->
+    <string name="city_name">Calabar</string>
+    <string name="low_temp">13\u2103</string>
+    <string name="high_temp">34\u2103</string>
+    <string name="desc">Mostly sunny</string>
 </resources>
