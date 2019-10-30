@@ -67,7 +67,8 @@ public class WeatherDataFetcher {
     public String getWeatherData(String lat , String lon){
         try{
             String url = Uri.parse("https://api.openweathermap.org/data/2.5/weather").buildUpon()
-                    .appendQueryParameter("lat",lat).appendQueryParameter("lon",lon).appendQueryParameter("appid",APPID)
+                    .appendQueryParameter("lat",lat).appendQueryParameter("lon",lon).appendQueryParameter("units","metric")
+                    .appendQueryParameter("appid",APPID)
                     .build().toString() ;
             String json = getUrlString(url) ;
             Log.i(TAG,"Received json: "+ json);

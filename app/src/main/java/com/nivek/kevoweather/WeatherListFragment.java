@@ -1,6 +1,9 @@
 package com.nivek.kevoweather;
 
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -9,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView ;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +33,7 @@ public class WeatherListFragment extends Fragment {
     private NigerianState[] statesData ;
     private static final String TAG = "WeatherListFragment";
     private RecyclerView recyclerView ;
+    private IconDownloader<StateWeatherHolder> downloader;
 
     /**
      * Creates and return an instace of the fragment
@@ -38,10 +44,26 @@ public class WeatherListFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         new FetchWeatherDataTask().execute();
-        Log.i(TAG,"An instance of the fragment was created") ;
+        //create a response handler for this thread and pass it to the IconDownloader
+        Handler responseHandler = new Handler(Looper.getMainLooper());
+        downloader = new IconDownloader<>(responseHandler);
+        downloader.setListener(new IconDownloader.DownLoadListener<StateWeatherHolder>() {
+            @Override
+            public void onIconDownloaded(StateWeatherHolder target, Bitmap bitmap) {
+                Log.i(TAG,"An images was downloaded");
+                Drawable icon = new BitmapDrawable(getResources(), bitmap);
+                target.setIcon(icon);
+            }
+        });
+        downloader.start();
+        downloader.getLooper() ;
+
+
+        Log.i(TAG, "An instance of the fragment was created");
 
     }
 
@@ -55,6 +77,18 @@ public class WeatherListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view ;
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        downloader.quit() ;
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        downloader.clearQueue();
     }
 
     private void setupAdapter(){
@@ -110,10 +144,14 @@ public class WeatherListFragment extends Fragment {
 
         public void bindWeatherData(NigerianState state){
             city.setText(state.getName());
-            lowTemp.setText(state.getLowTemp());
-            highTemp.setText(state.getHighTemp());
+            lowTemp.setText(state.getLowTemp()+"\u2103");
+            highTemp.setText(state.getHighTemp()+"\u2103");
             desc.setText(state.getDesc());
             //left here to attach the icon , this will be accounted for later
+        }
+
+        public  void setIcon(Drawable icon){
+            this.weatherIcon.setImageDrawable(icon);
         }
 
     }
@@ -136,6 +174,7 @@ public class WeatherListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull StateWeatherHolder holder, int position) {
             holder.bindWeatherData(this.stateData[position]);
+            downloader.queTask(holder ,this.stateData[position].getIcon());
         }
 
         @Override

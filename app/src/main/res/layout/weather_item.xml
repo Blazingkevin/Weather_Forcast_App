@@ -4,26 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:layout_marginBottom="20dp"
+    android:background="@color/main_background"
     android:elevation="4dp">
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:background="@color/item_background"
+        android:layout_width="110dp"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:id="@+id/weather_icon"
+        android:layout_marginRight="5dp"
         android:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
+        android:background="@color/item_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
+            android:fontFamily="cursive"
             android:id="@+id/city"
             android:gravity="center"
-            android:textSize="30dp"
+            android:textSize="32dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
             android:text="@string/city_name"/>
 
         <LinearLayout
@@ -39,6 +45,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
                 android:text="@string/low_temp"
                 />
 
@@ -46,6 +53,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
                 android:text="-----"/>
 
             <TextView
@@ -55,6 +63,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
                 android:text="@string/high_temp"
                 />
 
@@ -67,6 +76,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_color"
             android:text="@string/desc"/>
 
 
